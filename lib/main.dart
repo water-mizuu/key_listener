@@ -7,8 +7,8 @@ import "package:flutter/services.dart";
 import "package:window_manager/window_manager.dart";
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   if (!kIsWeb && (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
-    WidgetsFlutterBinding.ensureInitialized();
     await windowManager.ensureInitialized();
 
     await WindowManager.instance.setMinimumSize(const Size(600, 700));
@@ -52,9 +52,9 @@ class _MainAppState extends State<MainApp> {
       ),
       home: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
-          final double normalTextSize = constraints.maxHeight * 0.045;
-          final double highlightTextSize = constraints.maxHeight * 0.20;
-          final double spacingTextSize = constraints.maxHeight * 0.035;
+          double normalTextSize = constraints.maxHeight * 0.045;
+          double highlightTextSize = constraints.maxHeight * 0.20;
+          double spacingTextSize = constraints.maxHeight * 0.035;
 
           return KeyboardListener(
             autofocus: true,
@@ -270,7 +270,7 @@ class _MainAppState extends State<MainApp> {
                                                   icon: "⌥",
                                                 ),
                                               ],
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -359,61 +359,53 @@ class _TileState extends State<Tile> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() {
-        _controller.forward();
-      }),
-      onExit: (_) => setState(() {
-        _controller.reverse();
-      }),
-      child: AnimatedBuilder(
-        animation: _controller,
-        builder: (BuildContext context, Widget? child) {
-          return Transform.scale(scale: _scale.value, child: child);
-        },
-        child: Container(
-          width: 225,
-          height: 256,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(4.0)),
-            color: Colors.black,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                color: Colors.blue,
-                child: Center(
-                  child: Text(
-                    widget.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
+  Widget build(BuildContext context) => MouseRegion(
+        onEnter: (_) => _controller.forward(),
+        onExit: (_) => _controller.reverse(),
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (BuildContext context, Widget? child) => Transform.scale(scale: _scale.value, child: child),
+          child: Container(
+            width: 225,
+            height: 256,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(4.0)),
+              color: Colors.black,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                  color: Colors.blue,
+                  child: Center(
+                    child: Text(
+                      widget.title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: ColoredBox(
-                  color: Colors.white,
-                  child: Center(child: widget.child),
+                Expanded(
+                  child: ColoredBox(
+                    color: Colors.white,
+                    child: Center(child: widget.child),
+                  ),
                 ),
-              ),
-              if (widget.description != null)
-                Container(
-                  constraints: BoxConstraints.loose(const Size(double.infinity, 256)),
-                  padding: const EdgeInsets.all(8.0),
-                  color: Colors.grey[200],
-                  child: Text(widget.description!, overflow: TextOverflow.fade),
-                ),
-            ],
+                if (widget.description != null)
+                  Container(
+                    constraints: BoxConstraints.loose(const Size(double.infinity, 256)),
+                    padding: const EdgeInsets.all(8.0),
+                    color: Colors.grey[200],
+                    child: Text(widget.description!, overflow: TextOverflow.fade),
+                  ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class ModifierSquare extends StatelessWidget {
@@ -427,25 +419,23 @@ class ModifierSquare extends StatelessWidget {
   final String icon;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 64,
-      height: 64,
-      decoration: BoxDecoration(
-        border: Border.all(color: isActivated ? Colors.black : Colors.grey[200]!, width: 4),
-        borderRadius: const BorderRadius.all(Radius.circular(12)),
-      ),
-      child: Center(
-        child: Text(
-          icon,
-          style: TextStyle(
-            color: isActivated ? Colors.black : Colors.grey[200],
-            fontSize: 36,
+  Widget build(BuildContext context) => Container(
+        width: 64,
+        height: 64,
+        decoration: BoxDecoration(
+          border: Border.all(color: isActivated ? Colors.black : Colors.grey[200]!, width: 4),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: Center(
+          child: Text(
+            icon,
+            style: TextStyle(
+              color: isActivated ? Colors.black : Colors.grey[200],
+              fontSize: 36,
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
 
 class ClipboardMessage extends StatefulWidget {
@@ -472,22 +462,20 @@ class _ClipboardMessageState extends State<ClipboardMessage> with SingleTickerPr
         }
       });
     _opacity = CurvedAnimation(parent: _animationController, curve: Curves.easeInOut) //
-        .drive(TweenSequence<double>(<TweenSequenceItem<double>>[
-      TweenSequenceItem<double>(tween: Tween<double>(begin: 0.0, end: 1.0), weight: 0.25),
-      TweenSequenceItem<double>(tween: ConstantTween<double>(1.0), weight: 0.50),
-      TweenSequenceItem<double>(tween: Tween<double>(begin: 1.0, end: 0.0), weight: 0.25),
-    ]));
+        .drive(
+      TweenSequence<double>(<TweenSequenceItem<double>>[
+        TweenSequenceItem<double>(tween: Tween<double>(begin: 0.0, end: 1.0), weight: 0.10),
+        TweenSequenceItem<double>(tween: ConstantTween<double>(1.0), weight: 0.80),
+        TweenSequenceItem<double>(tween: Tween<double>(begin: 1.0, end: 0.0), weight: 0.10),
+      ]),
+    );
     _animationController.forward();
   }
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (BuildContext context, Widget? child) {
-        return Opacity(opacity: _opacity.value, child: child);
-      },
-      child: const Text("Copied to clipboard!"),
-    );
-  }
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _animationController,
+        builder: (BuildContext context, Widget? child) => Opacity(opacity: _opacity.value, child: child),
+        child: const Text("Copied to clipboard!"),
+      );
 }

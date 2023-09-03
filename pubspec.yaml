@@ -1,16 +1,15 @@
 name: key_listener
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.1.0-63.1.beta <4.0.0'
+  sdk: ">=3.2.0-0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   window_manager:
-
 
 flutter:
   uses-material-design: true

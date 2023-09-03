@@ -1,0 +1,18 @@
+{
+    "sourceFile": "pubspec.yaml",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1693703081585,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1693703081584,
+            "name": "Commit-0",
+            "content": "name: key_listener\r\ndescription: A new Flutter project.\r\npublish_to: 'none'\r\nversion: 0.1.0\r\n\r\nenvironment:\r\n  sdk: '>=3.2 <4.0.0'\r\n\r\ndependencies:\r\n  flutter:\r\n    sdk: flutter\r\n  window_manager:\r\n\r\n\r\nflutter:\r\n  uses-material-design: true\r\n"
+        }
+    ]
+}
